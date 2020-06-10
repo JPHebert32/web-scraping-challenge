@@ -12,8 +12,7 @@ def init_browser():
 def scrape():
     browser = init_browser()
 
-    # NASA Mars News
-    
+    #___NASA Mars News___    
     url1 = 'https://mars.nasa.gov/news/'
     browser.visit(url1)
     html = browser.html
@@ -24,7 +23,7 @@ def scrape():
     news_p = soup.find('ul', class_= "item_list").find("div", class_="article_teaser_body").get_text()
 
 
-    # JPL Mars Space Images - Featured Image
+    #___JPL Mars Space Images - Featured Image___
     url2 = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(url2)
     html = browser.html
@@ -45,7 +44,7 @@ def scrape():
     url = 'https://www.jpl.nasa.gov'
     featured_image_url = url + featured_image_url
 
-    # Mars Weather
+    #___Mars Weather___
     url3 = 'https://twitter.com/marswxreport?lang=en'
     browser.visit(url3)
     html = browser.html
@@ -54,4 +53,31 @@ def scrape():
     # Scrape Weather Tweet
     mars_weather = soup.find("div",{"lang": "en", "dir": "auto"}).text.replace("\n"," ").strip()
 
-    # Mars Facts    
+
+    #___Mars Facts___
+
+    url4 = 'https://space-facts.com/mars/'
+
+    tables = pd.read_html(url4)   
+    facts_df = tables[0]
+    facts_df.columns = ['Description', 'Value']
+
+    # Set the index to the Description column
+    facts_df = facts_df.set_index('Description', inplace=True)
+    
+    html_table = df.to_html()
+    # Strip unwanted newlines to clean up the table.
+    html_table = html_table.replace('\n', '')
+
+
+    #___Mars Hemispheres___
+
+
+
+    #___Dictionary of all Mars Info Scraped___
+    mars_info_dict = {"news_title":news_title,"news_text":news_p,"featured_image":featured_image_url,
+    "mars_weather":mars_weather,"facts_table":table_html} #"hemisphere_img":hemisphere_image_urls
+
+    browser.quit()
+
+    return  mars_info_dict
