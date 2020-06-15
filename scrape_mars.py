@@ -51,7 +51,10 @@ def scrape():
     soup = bs(html,'html.parser')
 
     # Scrape Weather Tweet
-    mars_weather = soup.find("div",{"lang": "en", "dir": "auto"}).text.replace("\n"," ").strip()
+    mars_weather = soup.find("div",{"lang": "en", "dir": "auto"})
+    
+    mars_weather = mars_weather[2].find_all("span")
+    mars_weather[0].text
 
 
     #___Mars Facts___
